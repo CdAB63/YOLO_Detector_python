@@ -30,6 +30,14 @@ class YOLODetector():
         elif os.name == 'nt':
             cwd = os.path.dirname(__file__)
             os.environ['PATH'] = cwd + ';' + os.environ['PATH']
+            os.add_dll_directory(cwd)
+            # now see if there is a cuda toolkit
+            cuda_location = 'c:/Program Files/NVIDIA GPU Computing Toolkit/CUDA'
+            if os.path.isdir(cuda_location):
+                cuda_versions = [ sd for sd in os.listdir(cuda_location) if os.path.isdir(cuda_location+'/'+ sd) ]
+                if cuda_versions:
+                    cuda_versions.sort(reverse=True)
+                    os.add_dll_directory(cuda_location+'/'+cuda_versions[0]+'/bin')
             self.__lib = CDLL("darknet.dll", RTLD_GLOBAL)
             
         # set library parameters
